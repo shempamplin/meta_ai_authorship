@@ -32,13 +32,13 @@ def parse_persona(text: str) -> dict:
     all_heading_names = [h[1] for h in headings]
     sections = {}
     for key, heading in headings:
-        # Match the heading line, then capture everything until the next known
-        # heading or end of string.
+        # Match any line containing the heading string, then capture everything
+        # until the next known heading or end of string.
         others = [re.escape(h) for h in all_heading_names if h != heading]
         if others:
-            pattern = re.escape(heading) + r"[^\S\n]*\n(.*?)(?=" + "|".join(others) + r"|\Z)"
+            pattern = re.escape(heading) + r"[^\n]*\n(.*?)(?=" + "|".join(others) + r"|\Z)"
         else:
-            pattern = re.escape(heading) + r"[^\S\n]*\n(.*)"
+            pattern = re.escape(heading) + r"[^\n]*\n(.*)"
         match = re.search(pattern, text, re.DOTALL)
         sections[key] = match.group(1).strip() if match else ""
 
